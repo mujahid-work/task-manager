@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Task</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100 p-8">
   <div class="max-w-xl mx-auto">
     <h1 class="text-2xl font-bold mb-4">Create New Task</h1>
@@ -27,38 +29,8 @@
     <ul id="taskList" class="bg-white p-4 rounded shadow"></ul>
   </div>
 
-  <script>
-    async function fetchTasks() {
-      const res = await fetch('/tasks/fetch-tasks');
-      const data = await res.json();
-      const list = document.getElementById('taskList');
-      list.innerHTML = '';
-      data.forEach(task => {
-        const li = document.createElement('li');
-        li.className = 'mb-2 border-b pb-2';
-        li.innerHTML = `<strong>${task.title}</strong><p>${task.description}</p>`;
-        list.appendChild(li);
-      });
-    }
-
-    document.getElementById('taskForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const title = document.getElementById('title').value;
-      const description = document.getElementById('description').value;
-
-      const response = await fetch('/tasks/create-task', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description })
-      });
-
-      const result = await response.json();
-      document.getElementById('message').textContent = 'Task created successfully!';
-      fetchTasks();
-      this.reset();
-    });
-
-    window.onload = fetchTasks;
-  </script>
+  <!-- Include JS here -->
+  <script src="../js/task/task.js"></script>
 </body>
+
 </html>

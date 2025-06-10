@@ -3,6 +3,7 @@
 namespace App\Config;
 
 use PDO;
+use PDOException;
 
 /**
  * Class Database
@@ -21,17 +22,15 @@ class Database
      */
     public static function initialize(array $config): void
     {
-        $dsn = sprintf(
-            'mysql:host=%s;dbname=%s;charset=utf8mb4',
-            $config['DB_HOST'],
-            $config['DB_NAME']
-        );
-        self::$connection = new PDO(
-            $dsn,
-            $config['DB_USER'],
-            $config['DB_PASS'],
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-        );
+        try {
+            $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $config['DB_HOST'], $config['DB_NAME']);
+            self::$connection = new PDO($dsn, $config['DB_USER'], $config['DB_PASS'], [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            ]);
+        } catch (PDOException $e) {
+            http_response_code(500);
+            die(json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]));
+        }
     }
 
     /**

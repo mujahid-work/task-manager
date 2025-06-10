@@ -6,6 +6,8 @@ use App\Config\Database;
 use App\Entity\Task;
 use App\Repository\Contracts\TaskRepositoryInterface;
 use PDO;
+use PDOException;
+use RuntimeException;
 
 /**
  * Class TaskRepository
@@ -34,8 +36,12 @@ class TaskRepository implements TaskRepositoryInterface
      */
     public function all(): array
     {
-        $stmt = $this->db->query("SELECT * FROM tasks");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->db->query("SELECT * FROM tasks");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            throw new RuntimeException("Failed to fetch tasks: " . $e->getMessage(), 500);
+        }
     }
 
     /**
@@ -46,12 +52,16 @@ class TaskRepository implements TaskRepositoryInterface
      */
     public function save(Task $task): Task
     {
-        $stmt = $this->db->prepare("INSERT INTO tasks (title, description) VALUES (:title, :description)");
-        $stmt->execute([
-            'title' => $task->title,
-            'description' => $task->description
-        ]);
-        $task->id = (int)$this->db->lastInsertId();
-        return $task;
+        try {
+            $stmt = $this->db->prepare("INSERT INTO tasks (title, description) VALUES (:title, :description)");
+            $stmt->execute([
+                'title' => $task->title,
+                'description' => $task->description
+            ]);
+            $task->id = (int)$this->db->lastInsertId();
+            return $task;
+        } catch (PDOException $e) {
+            throw new RuntimeException("Failed to create task: " . $e->getMessage(), 500);
+        }
     }
 }

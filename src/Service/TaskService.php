@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Task;
 use App\Repository\Contracts\TaskRepositoryInterface;
+use InvalidArgumentException;
 
 /**
  * Class TaskService
@@ -40,6 +41,10 @@ class TaskService
      */
     public function create(array $data): Task
     {
+        if (empty($data['title']) || empty($data['description'])) {
+            throw new InvalidArgumentException("Title and description are required");
+        }
+
         $task = new Task(null, $data['title'], $data['description']);
         return $this->repository->save($task);
     }

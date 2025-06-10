@@ -6,6 +6,7 @@ use App\Http\Request;
 use App\Http\Response;
 use App\Service\TaskService;
 use App\Repository\MySQL\TaskRepository;
+use Throwable;
 
 /**
  * Class TaskController
@@ -35,7 +36,11 @@ class TaskController
      */
     public function index(): Response
     {
-        return new Response($this->service->all());
+        try {
+            return new Response($this->service->all());
+        } catch (Throwable $e) {
+            return new Response(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -46,7 +51,11 @@ class TaskController
      */
     public function store(Request $request): Response
     {
-        $task = $this->service->create($request->body);
-        return new Response($task->toArray(), 201);
+        try {
+            $task = $this->service->create($request->body);
+            return new Response($task->toArray(), 201);
+        } catch (Throwable $e) {
+            return new Response(['error' => $e->getMessage()], 400);
+        }
     }
 }
