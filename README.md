@@ -48,6 +48,13 @@ mysql -u {username} -p {password} {database-name} < {path-to-dir}/task-manager/b
 php -S localhost:8000 -t public
 ```
 
+### 6. Run Backend Tests
+
+```sh
+cd task-manager/backend
+vendor/bin/phpunit tests/
+```
+
 
 ### Frontend Setup
 

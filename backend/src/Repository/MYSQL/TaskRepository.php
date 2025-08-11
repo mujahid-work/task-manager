@@ -38,7 +38,12 @@ class TaskRepository implements TaskRepositoryInterface
   {
     try {
       $stmt = $this->db->query("SELECT * FROM tasks");
-      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $tasks = [];
+      foreach ($rows as $row) {
+        $tasks[] = new Task($row['id'], $row['title'], $row['description']);
+      }
+      return $tasks;
     } catch (PDOException $e) {
       throw new RuntimeException("Failed to fetch tasks: " . $e->getMessage(), 500);
     }
