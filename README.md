@@ -74,5 +74,5 @@ npm start
 #### 3. Run Frontend Tests
 
 ```sh
-npm test
+npm run test
 ```
