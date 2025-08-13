@@ -1,3 +1,3 @@
-export interface ErrorMessageTypes {
+export interface ErrorMessageProps {
   message: string;
 }

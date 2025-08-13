@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 
 import { getTaskById } from '../../api/task/taskAPI';
-import { TaskTypes } from '../../types/task/Task';
+import { TaskProps } from '../../types/task/Task';
 
 export const useTaskDetail = (id: number) => {
-  const [task, setTask] = useState<TaskTypes | null>(null);
+  const [task, setTask] = useState<TaskProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
